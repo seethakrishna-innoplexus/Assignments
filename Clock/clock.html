@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body{
+			margin-top: 0px;
+			margin-left: 0px;
+
+		}
+		.frame{
+			border-radius:25px;
+			background-color: #ddd;
+			height:320px;
+			width: 320px;
+			padding-top: 20px;
+			padding-left: 20px;
+			padding-bottom: 20px;
+			padding-right: 20px;
+			position:absolute;
+			top:0px;
+			left: 0px;
+
+		}
+		.dial {
+		  border-radius:100%;
+		  background: white url(ios_clock.svg) no-repeat center;
+		  background-size: 88%;
+		  height: 320px;
+		  width: 320px;
+		  position: absolute;
+		  top:20px;
+		  left: 20px;
+
+		}
+		.hour-frame{
+		  position: absolute;
+		  top: 0;
+		  right: 0;
+		  bottom: 0;
+		  left: 0;
+		  height:320px;
+		  width:320px;
+		  animation:rotation 43200s infinite linear;
+		}
+		.min-frame{
+		  position: absolute;
+		  top: 0;
+		  right: 0;
+		  bottom: 0;
+		  left: 0;
+		  height:320px;
+		  width:320px;
+		  animation:rotation 3600s infinite linear;
+		}
+		.sec-frame {
+		  position: absolute;
+		  top: 0;
+		  right: 0;
+		  bottom: 0;
+		  left: 0;
+		  height:320px;
+		  width:320px;
+		  animation:rotation 60s infinite linear;
+		}
+		
+		.hour{
+			border-radius:20px;
+			background-color: black;
+			height:80px;
+			width:8px;
+			position:absolute;
+			top:155px;
+			left:156px;
+			
+		}
+		.min{
+			border-radius:20px;
+			background-color: black;
+			height:120px;
+			width:6px;
+			position:absolute;
+			top:155px;
+			left:157px;
+
+		}
+		.sec{
+			border-radius:20px;
+			background-color: black;
+			height:100px;
+			width:2px;
+			position:absolute;
+			top:140px;
+			left:159px;
+
+		}
+		@keyframes rotation{
+			100%{
+				transform :rotateZ(360deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="frame">
+		<div class="dial">
+			<div class="hour-frame">
+				<div class="hour"></div>
+			</div>
+			<div class="min-frame">
+				<div class="min"></div>
+			</div>
+			<div class="sec-frame">
+				<div class="sec"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var ang1,ang2,ang3;
+		var date = new Date();
+		
+		var sec=date.getSeconds();
+		
+		var min=date.getMinutes();
+		
+		var hour=date.getHours();
+		
+		ang1=sec*360/60;
+		
+		ang2=min*360/60+sec*2/60;
+		
+		ang3=(hour*30)+(min/60)*30;
+		
+		ang1=ang1-180;
+		ang2=ang2-180;
+		ang3=ang3-180;
+
+		var div_sec=document.getElementsByClassName("sec-frame");
+		var div_min=document.getElementsByClassName("min-frame");
+		var div_hour=document.getElementsByClassName("hour-frame");
+		div_sec[0].style.transform='rotateZ('+ang1+'deg)';
+		div_min[0].style.transform='rotateZ('+ang2+'deg)';
+		div_hour[0].style.transform='rotateZ('+ang3+'deg)';
+	</script>
+
+</body>
+	
+</html>
+

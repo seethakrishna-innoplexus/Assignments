@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.msg{
+				background-color: #ddd;
+				text-decoration-color: black;
+				font-size: 30px;
+				text-align: center;
+			}
+			.table{
+				background-color: white;
+				width:180px;
+				height:180px;
+			}
+			.tile {
+ 			    background-color: #ccc;
+    			border-color: red;
+    			color: white;
+    			width:50px;
+    			height: 50px;
+    			margin-left: 5px;
+    			margin-top: 5px;
+    			text-align: center;
+    			display: inline-block;
+    			font-size: 50px;
+   				cursor: pointer;
+
+			}
+			.button{
+				background-color: green;
+				width:100px;
+				height:35px;
+				font-size: 25px;
+			}
+			.button2{
+				background-color: green;
+				width:130px;
+				height:55px;
+				font-size: 25px;
+				text-align: center;
+
+			}
+			a:link {
+ 				
+    			text-decoration: none;
+			}
+
+			a:visited {
+				
+			    text-decoration: none;
+			}
+
+			a:hover {
+				
+			    text-decoration: none;
+			}
+
+			a:active {
+				
+			    text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+
+	<p class="msg">You are now in Computer Mode. Click on Two Player Mode to play two plyers</p>
+	<div class="table">
+
+		<div class="tile" id="1" onclick="markX(1)" >_</div>
+		<div class="tile" id="2" onclick="markX(2)" >_</div>
+		<div class="tile" id="3" onclick="markX(3)" >_</div>
+		<div class="tile" id="4" onclick="markX(4)" >_</div>
+		<div class="tile" id="5" onclick="markX(5)" >_</div>
+		<div class="tile" id="6" onclick="markX(6)" >_</div>
+		<div class="tile" id="7" onclick="markX(7)" >_</div>
+		<div class="tile" id="8" onclick="markX(8)" >_</div>
+		<div class="tile" id="9" onclick="markX(9)" >_</div>
+		
+	</div>
+	<br>
+	<br>
+	<button class="button" onclick="reload()">Restart</button>
+	<br>
+	<br>
+	<p id="msg" class="msg"></p>
+	<br>
+	<div class="button2">
+	<a href="tictac.html" style="color:black">Two Player Mode</a>
+	</div>
+	<script>
+		
+
+		var count=0;
+		var arr=["_","_","_","_","_","_","_","_","_"];
+		var ind=[];
+
+		function markX(num){
+
+			if(sessionStorage.getItem("array2")==null){
+			sessionStorage.setItem("array2",arr);
+			sessionStorage.setItem("count2",count);
+			}
+
+			var elem=document.getElementById(num);
+			if(elem.innerHTML=="_"){
+				 elem.innerHTML="X";
+				 elem.style.color='red';
+				 count++;
+				 sessionStorage.setItem("count2",count);
+				 arr[num-1]=elem.innerHTML;
+				 sessionStorage.setItem("array2",arr);
+				 ind.push(num);
+				 sessionStorage.setItem("index2",ind);
+			}
+
+			function rndm_mark(){
+
+				var rndm_num=Math.floor((Math.random() * 10) + 1);
+				if(rndm_num==10){
+						rndm_num--;
+					} 
+				
+				function numequal(n) {
+					return n == rndm_num;
+				}
+
+				if(ind.some(numequal)==true){
+					rndm_mark();
+				}else{
+					
+					markO(rndm_num);
+
+				}
+			}
+
+			if(count<9){
+				rndm_mark();
+			}
+
+			if(count>4){
+				check();
+			}
+		}
+		
+		function markO(num){
+			var elem=document.getElementById(num);
+			if(elem.innerHTML=="_"){
+				 elem.innerHTML="O";
+				 elem.style.color='green';
+				 count++;
+				 sessionStorage.setItem("count2",count);
+				 arr[num-1]=elem.innerHTML;
+				 sessionStorage.setItem("array2",arr);
+				 ind.push(num);
+				 sessionStorage.setItem("index2",ind);
+			}
+		}
+
+		
+
+			
+
+			function check(){
+				//All the possible triads for a game to be over
+				var result=[is_same(arr,0,1,2),
+						is_same(arr,0,3,6),
+						is_same(arr,0,4,8),
+						is_same(arr,1,4,7),
+						is_same(arr,2,4,6),
+						is_same(arr,2,5,8),
+						is_same(arr,3,4,5),
+						is_same(arr,6,7,8)
+						];
+				function equal(m) {
+					return m == 0;
+				}
+
+
+
+				if(count==9 && result.some(equal)==false){
+				
+
+				document.getElementById("msg").innerHTML="Its a Draw!! Please Restart to play again!!";
+				
+				}
+
+		}
+
+		function is_same(array,a,b,c){
+			if(array[a]=="X"){
+				
+				if(array[b]=="X"){
+					
+					if(array[c]=="X"){
+						document.getElementById("msg").innerHTML="You Win!! Please Restart to play again!!";
+						return 0;
+					}
+				}
+			}else if(array[a]=="O"){
+
+				if(array[b]=="O"){
+
+					if(array[c]=="O"){
+
+						document.getElementById("msg").innerHTML="Computer Wins!! Please Restart to play again!!";
+						return 0;
+					}
+				}
+
+			}
+		}
+
+		if(sessionStorage.getItem("array2")!==null){
+			document.onload=load_marks();
+		}
+
+		function load_marks(){
+
+			count=Number(sessionStorage.getItem("count2"));
+			arr=sessionStorage.getItem("array2").split(",");
+			ind=sessionStorage.getItem("index2").split(",");
+			var arr3=sessionStorage.getItem("array2");
+			for(var i=1; i<10;i++){
+				var elem=document.getElementById(i)
+				elem.innerHTML=arr3.split(",")[i-1];
+				if(elem.innerHTML=="X"){
+					elem.style.color='red';
+				}else if(elem.innerHTML=="O"){
+					elem.style.color='green';
+				}
+
+			}
+
+		}
+
+		function reload(){
+			window.location.reload();
+			sessionStorage.removeItem("array2");
+			sessionStorage.removeItem("count2");
+			sessionStorage.removeItem("index2");
+		
+		}
+
+	</script>
+	</body>
+</html>

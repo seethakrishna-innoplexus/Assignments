@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.msg{
+				background-color: #ddd;
+				text-decoration-color: black;
+				font-size: 30px;
+				text-align: center;
+			}
+			.table{
+				background-color: white;
+				width:180px;
+				height:180px;
+			}
+			.tile {
+ 			    background-color: #ccc;
+    			border-color: red;
+    			color: white;
+    			width:50px;
+    			height: 50px;
+    			margin-left: 5px;
+    			margin-top: 5px;
+    			text-align: center;
+    			display: inline-block;
+    			font-size: 50px;
+   				cursor: pointer;
+
+			}
+			.button{
+				background-color: green;
+				width:100px;
+				height:35px;
+				font-size: 25px;
+			}
+			.button2{
+				background-color: green;
+				width:110px;
+				height:60px;
+				font-size: 25px;
+				text-align: center;
+
+			}
+			a:link {
+ 				
+    			text-decoration: none;
+			}
+
+			a:visited {
+				
+			    text-decoration: none;
+			}
+
+			a:hover {
+				
+			    text-decoration: none;
+			}
+
+			a:active {
+				
+			    text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+	<p class="msg">You are now in Two Player Mode. Click on Computer Mode to play with computer</p>
+	<div class="table">
+
+		<div class="tile" id="1" onclick="mark(1)" >_</div>
+		<div class="tile" id="2" onclick="mark(2)" >_</div>
+		<div class="tile" id="3" onclick="mark(3)" >_</div>
+		<div class="tile" id="4" onclick="mark(4)" >_</div>
+		<div class="tile" id="5" onclick="mark(5)" >_</div>
+		<div class="tile" id="6" onclick="mark(6)" >_</div>
+		<div class="tile" id="7" onclick="mark(7)" >_</div>
+		<div class="tile" id="8" onclick="mark(8)" >_</div>
+		<div class="tile" id="9" onclick="mark(9)" >_</div>
+		
+	</div>
+	<br>
+	<br>
+	<button class="button" onclick="reload()">Restart</button>
+	<br>
+	<br>
+	<p id="msg" class="msg">Player1's turn</p>
+	<br>
+	<div class="button2">
+	<a href="tictac_comp.html" style="color:black">Computer Mode</a>
+	</div>
+
+	<script>
+		
+
+		var count=0;
+		var arr=["_","_","_","_","_","_","_","_","_"];
+
+
+		
+
+		function mark(num){
+
+			if(sessionStorage.getItem("array")==null){
+			sessionStorage.setItem("array",arr);
+			sessionStorage.setItem("count",count);
+			}
+
+			var elem=document.getElementById(num);
+			
+			if(elem.innerHTML=="_"){
+				if(count%2==0){
+
+				 elem.innerHTML="X";
+				 elem.style.color='red';
+				 document.getElementById("msg").innerHTML="Player2's turn";
+				 count++;
+				 sessionStorage.setItem("count",count);
+				}else{
+					elem.innerHTML="O";
+					elem.style.color='green';
+					document.getElementById("msg").innerHTML="Player1's turn";
+					count++;
+					sessionStorage.setItem("count",count);
+				}
+			}
+
+			arr[num-1]=elem.innerHTML;
+			var arr2=sessionStorage.getItem("array");
+			arr2=arr2.split(",");
+			arr2[num-1]=elem.innerHTML;
+
+			sessionStorage.setItem("array",arr2);
+			console.log(sessionStorage.getItem("array").split(","));
+
+			if(count>4){
+				//All the possible triads for a game to be over
+				var result=[is_same(arr,0,1,2),
+						is_same(arr,0,3,6),
+						is_same(arr,0,4,8),
+						is_same(arr,1,4,7),
+						is_same(arr,2,4,6),
+						is_same(arr,2,5,8),
+						is_same(arr,3,4,5),
+						is_same(arr,6,7,8)
+						];
+				function numequal(n) {
+					return n == 0;
+				}
+
+
+
+				if(count==9&& result.some(numequal)==false){
+				
+				document.getElementById("msg").innerHTML="Its a Draw!! Please Restart to play again!!";
+				
+			}
+			}
+			
+
+		}
+
+		function is_same(array,a,b,c){
+			if(array[a]=="X"){
+				
+				if(array[b]=="X"){
+					
+					if(array[c]=="X"){
+						document.getElementById("msg").innerHTML="Player1 is the winner!! Please Restart to play again!!";
+						return 0;
+					}
+				}
+			}else if(array[a]=="O"){
+
+				if(array[b]=="O"){
+
+					if(array[c]=="O"){
+
+						document.getElementById("msg").innerHTML="Player2 is the winner!! Please Restart to play again!!";
+						return 0;
+					}
+				}
+
+			}
+		}
+
+		function reload(){
+			window.location.reload();
+			sessionStorage.removeItem("array");
+			sessionStorage.removeItem("count");
+		}
+
+		if(sessionStorage.getItem("array")!==null){
+			document.onload=load_marks();
+		}
+		
+		function load_marks(){
+
+			count=Number(sessionStorage.getItem("count"));
+			arr=sessionStorage.getItem("array").split(",");
+			var arr3=sessionStorage.getItem("array");
+			for(var i=1; i<10;i++){
+				var elem=document.getElementById(i)
+				elem.innerHTML=arr3.split(",")[i-1];
+				if(elem.innerHTML=="X"){
+					elem.style.color='red';
+				}else if(elem.innerHTML=="O"){
+					elem.style.color='green';
+				}
+
+			}
+
+		}
+
+	</script>
+	</body>
+</html>
